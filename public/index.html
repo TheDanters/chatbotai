@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tutor Belajar AI - chatbot pendidikan berbasis Gemini yang menjelaskan materi pelajaran langkah demi langkah." />
+  <title>Tutor Belajar AI — Belajar Lebih Mudah dengan AI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar" id="beranda">
+    <div class="container nav-inner">
+      <a href="#beranda" class="brand">
+        <span class="brand-logo">AI</span>
+        <span>Tutor Belajar AI</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#fitur">Fitur</a>
+        <a href="#cara-kerja">Cara Kerja</a>
+        <a href="#chat" class="nav-cta">Mulai Belajar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <span class="badge">Didukung Google Gemini AI</span>
+          <h1>Belajar Apa Saja,<br />Kapan Saja bersama <span>Tutor AI</span></h1>
+          <p>
+            Tutor Belajar AI adalah chatbot pendidikan yang menjelaskan materi
+            pelajaran langkah demi langkah, memberi contoh, dan mengajakmu
+            berpikir — bukan sekadar memberi jawaban.
+          </p>
+          <div class="hero-actions">
+            <a href="#chat" class="btn btn-primary">Mulai Belajar Gratis</a>
+            <a href="#fitur" class="btn btn-ghost">Lihat Fitur</a>
+          </div>
+          <div class="hero-stats">
+            <div><strong>24/7</strong><span>Siap membantu</span></div>
+            <div><strong>1-on-1</strong><span>Perhatian penuh</span></div>
+            <div><strong>Gratis</strong><span>Tanpa biaya</span></div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="mini-chat">
+            <div class="mini-bubble bot">Hai! Mau belajar topik apa hari ini?</div>
+            <div class="mini-bubble user">Jelaskan hukum Newton dong</div>
+            <div class="mini-bubble bot">Tentu! Hukum Newton ada 3, kita bahas satu per satu ya...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="fitur">
+      <div class="container">
+        <div class="section-head">
+          <h2>Kenapa Belajar di Tutor Belajar AI?</h2>
+          <p>Dirancang agar kamu benar-benar paham, bukan sekadar menghafal.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Penjelasan Bertahap</h3>
+            <p>Konsep dijelaskan dari yang sederhana ke yang lebih sulit, langkah demi langkah.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3>Contoh &amp; Analogi</h3>
+            <p>Materi abstrak diubah menjadi contoh nyata yang mudah dibayangkan.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Latihan Soal</h3>
+            <p>Minta soal latihan dan pembahasannya untuk menguji pemahamanmu.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3>Bahasa Santai</h3>
+            <p>Dijawab dalam Bahasa Indonesia yang ramah, sopan, dan tidak menghakimi.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="how" id="cara-kerja">
+      <div class="container">
+        <div class="section-head">
+          <h2>Cara Kerja</h2>
+          <p>Mulai belajar hanya dalam tiga langkah sederhana.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <h3>Tulis Pertanyaanmu</h3>
+            <p>Ketik materi atau soal yang ingin kamu pahami di kolom chat.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <h3>AI Menyusun Penjelasan</h3>
+            <p>Gemini memproses pertanyaan dan menyusun jawaban yang relevan.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <h3>Diskusi &amp; Latihan</h3>
+            <p>Lanjutkan percakapan untuk bertanya lebih dalam atau minta soal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chat-section" id="chat">
+      <div class="container">
+        <div class="section-head">
+          <h2>Coba Sekarang</h2>
+          <p>Tanyakan apa saja — mulai dari matematika, IPA, IPS, hingga bahasa.</p>
+        </div>
+
+        <div class="chat-app">
+          <header class="chat-header">
+            <div class="avatar">AI</div>
+            <div class="header-info">
+              <h1>Tutor Belajar AI</h1>
+              <p><span class="dot"></span> Siap membantu kamu belajar</p>
+            </div>
+            <button id="reset-btn" type="button" title="Mulai percakapan baru">Reset</button>
+          </header>
+
+          <div id="chat-box" class="chat-box"></div>
+
+          <div class="suggestions" id="suggestions">
+            <button type="button" data-prompt="Jelaskan hukum Newton dengan bahasa sederhana.">Hukum Newton</button>
+            <button type="button" data-prompt="Bantu aku memahami pecahan dan cara menghitungnya.">Pecahan</button>
+            <button type="button" data-prompt="Buatkan 3 soal latihan tentang fotosintesis.">Soal Fotosintesis</button>
+          </div>
+
+          <form id="chat-form" class="chat-form">
+            <input type="text" id="user-input" placeholder="Tanya apa saja tentang pelajaranmu..." autocomplete="off" />
+            <button type="submit" id="send-btn">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="#beranda" class="brand">
+          <span class="brand-logo">AI</span>
+          <span>Tutor Belajar AI</span>
+        </a>
+        <p>Chatbot pendidikan berbasis Gemini AI. Proyek Sesi 3 Hacktiv8.</p>
+      </div>
+      <nav class="footer-links">
+        <a href="#fitur">Fitur</a>
+        <a href="#cara-kerja">Cara Kerja</a>
+        <a href="#chat">Mulai Belajar</a>
+      </nav>
+    </div>
+    <div class="container copyright">
+      © <span id="year"></span> Tutor Belajar AI. Dibuat untuk pembelajaran.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

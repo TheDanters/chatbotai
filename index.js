@@ -11,20 +11,48 @@ const ai = new GoogleGenAI({
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Gemini kadang membalas 503 (high demand) / 429. Coba ulang beberapa kali.
+async function generateWithRetry(params, attempts = 3) {
+    let lastError;
+    for (let i = 0; i < attempts; i++) {
+        try {
+            return await ai.models.generateContent(params);
+        } catch (e) {
+            lastError = e;
+            const status = e?.status ?? e?.code;
+            const retryable =
+                status === 503 ||
+                status === 429 ||
+                /UNAVAILABLE|high demand|overloaded|try again/i.test(e?.message ?? "");
+            if (!retryable || i === attempts - 1) throw e;
+            await sleep(800 * (i + 1));
+        }
+    }
+    throw lastError;
+}
+
 // System Instruction: menetapkan persona, tone, batasan, dan format output chatbot.
 const SYSTEM_INSTRUCTION = `
-Kamu adalah "Tutor Belajar AI", seorang tutor pendidikan yang sabar, ramah, dan suportif.
-Tugasmu membantu pelajar memahami materi pelajaran (matematika, IPA, IPS, bahasa, dan umum).
+Kamu adalah "Mentor AI", seorang mentor yang sabar, ramah, dan suportif.
+Tugasmu membantu siapa saja memahami dunia kecerdasan buatan (AI), dengan fokus utama:
+- Konsep dasar AI, machine learning, dan deep learning
+- Large Language Model (LLM) dan generative AI
+- Prompt engineering
+- Etika dan penggunaan AI yang bertanggung jawab
+
+Kamu juga boleh membantu topik teknologi lain yang masih berkaitan dengan AI.
 
 Aturan:
 - Selalu jawab dalam Bahasa Indonesia yang santai namun tetap sopan.
 - Jelaskan konsep langkah demi langkah, dari yang sederhana ke yang lebih sulit.
-- Berikan contoh konkret atau analogi agar materi mudah dipahami.
-- Setelah menjelaskan, ajukan satu pertanyaan singkat untuk memancing siswa berpikir.
-- Jika siswa salah, jangan menyalahkan; bimbing mereka menemukan jawaban yang benar.
-- Jika diminta mengerjakan PR, bimbing dengan langkah pengerjaan, bukan hanya menyalin jawaban.
+- Gunakan analogi atau contoh nyata agar konsep abstrak mudah dipahami.
+- Setelah menjelaskan, ajukan satu pertanyaan singkat untuk memancing rasa ingin tahu.
+- Jika pengguna salah paham, jangan menyalahkan; bimbing mereka menemukan pemahaman yang benar.
+- Jika diminta contoh prompt atau kode, berikan contoh yang singkat dan jelas.
 - Gunakan format yang rapi: poin-poin atau penomoran bila perlu.
-- Tolak dengan sopan permintaan di luar topik edukasi dan arahkan kembali ke belajar.
+- Tolak dengan sopan permintaan di luar topik seputar AI dan arahkan kembali ke belajar AI.
 `.trim();
 
 app.use(cors());
@@ -44,7 +72,7 @@ app.post("/api/chat", async (req, res) => {
             parts: [{ text: String(text ?? "") }],
         }));
 
-        const response = await ai.models.generateContent({
+        const response = await generateWithRetry({
             model: GEMINI_MODEL,
             contents,
             config: {
@@ -58,7 +86,8 @@ app.post("/api/chat", async (req, res) => {
         res.status(200).json({ result: response.text });
     } catch (e) {
         console.error(e);
-        res.status(500).json({ message: e.message });
+        const status = Number.isInteger(e?.status) ? e.status : 500;
+        res.status(status).json({ message: e.message });
     }
 });
 

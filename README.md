@@ -1,17 +1,20 @@
-# Tutor Belajar AI
+# Belajar AI
 
-Chatbot pendidikan berbasis **Google Gemini AI** yang menjelaskan materi pelajaran
-langkah demi langkah, memberi contoh, dan mengajak pengguna berpikir. Dibuat sebagai
-proyek **Sesi 3 — Pembuatan Chatbot berbasis Gemini AI Model** (Hacktiv8).
+Mentor chatbot berbasis **Google Gemini AI** yang menjelaskan konsep kecerdasan
+buatan (AI), machine learning, LLM, hingga prompt engineering dengan bahasa sederhana
+dan contoh nyata. Dibuat sebagai proyek **Sesi 3 — Pembuatan Chatbot berbasis Gemini
+AI Model** (Hacktiv8).
 
-Aplikasi terdiri dari **landing page** sebagai halaman utama, dengan antarmuka chatbot
-yang terintegrasi langsung di dalamnya.
+Aplikasi terdiri dari **landing page** sebagai halaman utama, dengan chatbot
+berbentuk **widget mengambang di pojok kanan bawah** yang muncul saat ikonnya diklik.
 
 ## Fitur
 
-- Landing page responsif (hero, fitur, cara kerja, dan bagian chatbot).
+- Landing page responsif (hero, fitur, cara kerja, dan CTA).
+- Widget chat mengambang di pojok kanan bawah — buka/tutup lewat ikon, tombol CTA,
+  atau tombol `Esc`.
 - Chat multi-turn: riwayat percakapan ikut dikirim ke model agar konteks terjaga.
-- **System Instruction** yang membentuk persona tutor (sabar, ramah, Bahasa Indonesia).
+- **System Instruction** yang membentuk persona "Mentor AI" (sabar, ramah, Bahasa Indonesia).
 - Konfigurasi parameter model: `temperature`, `topP`, `topK`.
 - Indikator "sedang berpikir" dan penanganan error di sisi frontend.
 - Tombol reset percakapan dan chip pertanyaan cepat.
@@ -77,8 +80,8 @@ gemini-chatbot-api/
 npm start
 ```
 
-Buka [http://localhost:3000](http://localhost:3000) di browser. Landing page akan tampil,
-scroll ke bagian **Coba Sekarang** atau klik **Mulai Belajar** untuk mulai berchat.
+Buka [http://localhost:3000](http://localhost:3000) di browser. Landing page akan tampil;
+klik ikon chat di **pojok kanan bawah** (atau tombol **Mulai Belajar**) untuk membuka chatbot.
 
 Mode pengembangan (auto-reload):
 
@@ -97,7 +100,7 @@ Menerima riwayat percakapan dan mengembalikan respons dari model Gemini.
 ```json
 {
   "conversation": [
-    { "role": "user", "text": "Jelaskan hukum Newton dengan bahasa sederhana." }
+    { "role": "user", "text": "Jelaskan apa itu kecerdasan buatan (AI) dengan bahasa sederhana." }
   ]
 }
 ```
@@ -106,7 +109,7 @@ Menerima riwayat percakapan dan mengembalikan respons dari model Gemini.
 
 ```json
 {
-  "result": "Tentu! Hukum Newton ada 3, kita bahas satu per satu ya..."
+  "result": "Gampang! AI itu payung besarnya, machine learning salah satu caranya..."
 }
 ```
 
@@ -122,7 +125,7 @@ Menerima riwayat percakapan dan mengembalikan respons dari model Gemini.
 ```bash
 curl -X POST http://localhost:3000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"conversation":[{"role":"user","text":"Apa itu fotosintesis?"}]}'
+  -d '{"conversation":[{"role":"user","text":"Apa perbedaan AI, machine learning, dan deep learning?"}]}'
 ```
 
 ## Konfigurasi Parameter Gemini
@@ -133,9 +136,9 @@ curl -X POST http://localhost:3000/api/chat \
 | `topP`        | 0.95  | Nucleus sampling, membatasi keacakan (0.0–1.0)          |
 | `topK`        | 40    | Membatasi pilihan ke K token paling mungkin (1–40)      |
 
-**System Instruction** menetapkan persona "Tutor Belajar AI": menjawab dalam Bahasa
-Indonesia yang santai namun sopan, menjelaskan bertahap, memberi contoh, memancing
-siswa berpikir, dan menolak topik di luar edukasi.
+**System Instruction** menetapkan persona "Mentor AI": menjawab dalam Bahasa
+Indonesia yang santai namun sopan, menjelaskan bertahap, memberi analogi, memancing
+rasa ingin tahu, dan menolak topik di luar seputar AI.
 
 ## Alur Kerja
 
@@ -143,6 +146,26 @@ siswa berpikir, dan menolak topik di luar edukasi.
 2. Frontend mengirim `POST /api/chat` berisi riwayat percakapan.
 3. Backend memformat pesan dan memanggil `generateContent()` pada Gemini.
 4. Respons dikembalikan sebagai `{ result }` dan ditampilkan di antarmuka chat.
+
+## Troubleshooting
+
+**Chat menampilkan "Failed to fetch" / "Tidak dapat terhubung ke server".**
+Pastikan aplikasi diakses lewat server Express, bukan dengan membuka file HTML
+langsung (double-click):
+
+1. Jalankan `npm start`.
+2. Buka `http://localhost:3000` di browser (bukan `file:///.../index.html`).
+
+Jika server berjalan di port lain, set `window.API_BASE` sebelum `script.js` dimuat,
+misalnya tambahkan di `index.html`:
+
+```html
+<script>window.API_BASE = "http://localhost:3001";</script>
+```
+
+**Respons lambat atau error 503 (high demand).**
+Model Gemini kadang sedang padat. Server otomatis mencoba ulang beberapa kali;
+jika masih gagal, coba lagi beberapa saat kemudian.
 
 ## Lisensi
 
